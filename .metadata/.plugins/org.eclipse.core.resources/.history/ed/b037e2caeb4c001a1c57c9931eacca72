@@ -1,0 +1,36 @@
+package cba.tcs.weather.parameters;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CityReader {
+
+	private final String filename;
+
+	public CityReader(String filename) {
+		this.filename = filename;
+	}
+
+	public List<City> readAll() throws IOException {
+		List<City> list = new ArrayList<City>();
+
+		BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+
+		String line;
+
+		while ((line = reader.readLine()) != null) {
+			String[] data = line.split(",");
+
+			list.add(new City(data[1], Double.parseDouble(data[2]), Double.parseDouble(parts[3])));
+		}
+
+		reader.close();
+
+		return list;
+	}
+
+}

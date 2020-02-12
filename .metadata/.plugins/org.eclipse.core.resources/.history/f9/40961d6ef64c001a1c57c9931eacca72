@@ -1,0 +1,35 @@
+package cba.tcs.weather.parameters;
+
+import static cba.tcs.weather.parameters.Altitude.TEMPERATURE_LAPSE;
+
+public class Pressure {
+
+	private static final double STANDARD_PRESSURE = 101325.0;
+	private static final double KELVIN = 273.15;
+	private static final double STANDARD_TEMPERATURE = 15 + KELVIN;
+	private static final double GAS_CONSTANT = 8.31447;
+	private static final double MOLAR = 0.0289644;
+	private static final double GRAVITY = 9.80665;
+	private static final double TEMPERATURE_LAPSE = 0.006;
+	
+
+	public static double calculate(double altitudeInMeters, double temperatureInCelsius) {
+		double temperatureInKelvin = KELVIN + temperatureInCelsius;
+
+		double standardPressureWithAltitude = barometricFormula(altitudeInMeters, temperatureInKelvin);
+
+		double pressureWithTemperature = (standardPressureWithAltitude * STANDARD_TEMPERATURE / temperatureInKelvin);
+
+		return toHPa(pressureWithTemperature);
+	}
+
+	private static double barometricFormula(double altitudeInMeters, double temperatureInKelvin) {
+		return STANDARD_PRESSURE * Math.pow((1 - (TEMPERATURE_LAPSE * altitudeInMeters / STANDARD_TEMPERATURE)),
+				(GRAVITY * MOLAR) / (GAS_CONSTANT * TEMPERATURE_LAPSE));
+	}
+
+	private static double toHPa(double pressureInPa) {
+		return Math.round(pressureInPa) / 100;
+	}
+
+}

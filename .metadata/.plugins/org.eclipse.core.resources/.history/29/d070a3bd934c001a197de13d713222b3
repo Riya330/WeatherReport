@@ -1,0 +1,5 @@
+package cba.tcs.configuration;
+
+public class ApplicationConfiguration {
+
+}

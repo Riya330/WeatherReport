@@ -1,0 +1,24 @@
+package cba.tcs.weather.parameters;
+
+import java.util.ArrayList;
+
+public class Condition {
+	
+//	private enum Condition {
+//		SUNNY("Sunny"), RAINY("Rainy"), SNOW("Snow");
+//
+//		private String name;
+//
+//		Condition(String name) {
+//			this.name = name;
+//		}
+//
+//		@Override
+//		public String toString() {
+//			return this.name;
+//		}
+//	};
+
+	
+	List<String> list= new ArrayList<String>();
+}

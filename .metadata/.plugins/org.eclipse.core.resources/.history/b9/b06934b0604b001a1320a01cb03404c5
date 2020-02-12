@@ -1,0 +1,42 @@
+package cba.tcs.parameters;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
+
+import static cba.tcs.weather.parameters.LocalTime.EARTH_INCLINATION;
+
+import org.junit.Test;
+
+import cba.tcs.weather.parameters.LocalTime;
+
+public class LocalTimeTest {
+
+	@Test
+	public void in_the_north_summer_the_sun_hits_tropic_of_cancer() {
+		LocalDate northSummer = LocalDate.of(2017, Month.JUNE, 21);
+		LocalDate northWinter = northSummer.plus((long) (EARTH_YEAR / 2), ChronoUnit.DAYS);
+
+		assertEquals(EARTH_INCLINATION, LocalTime.onDate(northSummer), 0.01);
+		assertEquals(-EARTH_INCLINATION, LocalTime.onDate(northWinter), 0.01);
+	}
+
+	@Test
+	public void in_the_south_summer_the_sun_hits_tropic_of_capricorn() {
+		LocalDate southWinter = LocalDate.of(2017, Month.JUNE, 21);
+		LocalDate southSummer = southWinter.plus((long) (EARTH_YEAR / 2.0), ChronoUnit.DAYS);
+
+		assertEquals(-EARTH_INCLINATION, AxialTilt.onDate(southSummer), 0.01);
+		assertEquals(EARTH_INCLINATION, AxialTilt.onDate(southWinter), 0.01);
+	}
+
+	@Test
+	public void in_the_spring_and_in_the_autumn_hits_equator() {
+		LocalDate northSummer = LocalDate.of(2017, Month.JUNE, 21);
+		LocalDate northAutumn = northSummer.plus((long) (EARTH_YEAR * (3.0 / 4.0)), ChronoUnit.DAYS);
+		LocalDate northSpring = northSummer.plus((long) (EARTH_YEAR / 4.0), ChronoUnit.DAYS);
+
+		assertEquals("North Autumn", 0, AxialTilt.onDate(northAutumn), 0.3);
+		assertEquals("North Spring", 0, AxialTilt.onDate(northSpring), 0.3);
+	}
+}

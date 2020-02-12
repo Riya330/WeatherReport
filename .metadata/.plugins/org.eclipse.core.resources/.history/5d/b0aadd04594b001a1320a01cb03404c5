@@ -1,0 +1,5 @@
+package cba.tcs.weather.parameters;
+
+public class LocalTime {
+
+}

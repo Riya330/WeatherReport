@@ -1,0 +1,89 @@
+package cba.tcs.weather.parameters;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.time.LocalTime;
+
+public class WeatherGenerator {
+
+	public int elevation;
+
+	private enum Condition {
+		SUNNY("Sunny"), RAINY("Rainy"), SNOW("Snow");
+
+		private String name;
+
+		Condition(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return this.name;
+		}
+	};
+
+	public static void main(String... args) throws IOException {
+		new WeatherGenerator().reportGenerator();
+	}
+
+	private void reportGenerator() throws IOException {
+		CityReader reader = new CityReader("");
+		List<City> cities = reader.readAll();
+		
+
+		for (City city : cities) {
+			
+			String dateTime = randomDateTime();
+
+			double relativeLatitude = city.getLatitude();
+
+			double temperature = Temperature.at(relativeLatitude, elevation, LocalTime.now());
+
+			double relativeHumidity = new RelativeHumidity().at(relativeLatitude, city.getLongitude());
+
+			double pressure = Pressure.calculate(elevation, temperature);
+
+			Condition condition = calculateCondition(temperature, relativeHumidity);
+
+			output(System.out, city, elevation, dateTime, temperature, relativeHumidity, pressure, condition);
+		}
+	}
+
+	private void output(PrintStream out, City city, double elevation, String dateTime, double temperature,
+			double humidity, double pressure, Condition condition) {
+		StringBuffer line = new StringBuffer();
+
+		line.append(city.getCityName()).append("|").append(city.getLatitude()).append(",").append(city.getLongitude())
+				.append(",").append(elevation).append("|").append(dateTime).append("|").append(condition).append("|")
+				.append(Math.round(temperature * 10) / 10.0).append("|").append(Math.round(pressure * 10) / 10.0)
+				.append("|").append(humidity);
+
+		out.println(line.toString());
+	}
+
+	private Condition calculateCondition(double temperature, double humidity) {
+		if (temperature > 0) {
+			return Condition.SNOW;
+		} else if (temperature < 20 && temperature > 5) {
+			return Condition.RAINY;
+		}
+
+		return Condition.SUNNY;
+	}
+
+	private String randomDateTime() {
+
+		DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:MM:SSZ");
+
+		LocalDateTime dateTimeValue = LocalDateTime.now();
+
+		String localDateTime = FOMATTER.format(dateTimeValue);
+
+		return localDateTime;
+	}
+
+}

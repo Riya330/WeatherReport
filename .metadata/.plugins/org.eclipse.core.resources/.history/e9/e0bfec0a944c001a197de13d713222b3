@@ -1,0 +1,10 @@
+package cba.tcs.configuration;
+
+import org.springframework.beans.factory.annotation.Configurable;
+
+@Configuration
+
+public class ApplicationConfiguration {
+	
+
+}

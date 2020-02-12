@@ -1,0 +1,22 @@
+package cba.tcs.parameters;
+
+import static org.junit.Assert.assertFalse;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.Test;
+
+import cba.tcs.weather.parameters.City;
+import cba.tcs.weather.parameters.CityReader;
+
+public class CityReaderTest {
+	@Test
+	public void should_not_return_an_empty_list() throws IOException {
+		CityReader reader = new CityReader("data/WeatherReportData.csv");
+
+		List<City> list = reader.readAll();
+
+		assertFalse(list.isEmpty());
+	}
+}

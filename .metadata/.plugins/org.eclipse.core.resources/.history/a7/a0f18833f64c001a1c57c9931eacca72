@@ -1,0 +1,25 @@
+package cba.tcs.weather.parameters;
+
+import java.io.IOException;
+
+import cba.tcs.altitude.MapLocationClient;
+
+public class Altitude {
+
+	public static final double TEMPERATURE_LAPSE = 0.0065;
+
+	private final String apiKey;
+
+	public Altitude(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public int calculate(double latitude, double longitude) throws IOException {
+		MapLocationClient client = new MapLocationClient(apiKey);
+
+		int altitude = client.fetchAltitude(latitude, longitude);
+
+		return altitude > 0 ? altitude : 0;
+	}
+
+}
